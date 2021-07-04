@@ -6,15 +6,23 @@
 
 import { useParams } from "react-router-dom"
 import SideChatList from "./SideChatList"
+import useStore from "../hooks/useStore"
+import MessageList from "./MessageList"
 
 function MainPage() {
 
-  let { id } = useParams()
+  let { chatId } = useParams()
   
-  const firstName = id.split('-')[0]
+  const users = useStore(store=>store.users)
   
-  const lastName = id.split('-')[1]
-
+  const firstName = chatId.split('_')[0]
+  
+  const lastName = chatId.split('_')[1]
+  
+  const currentUser = users.find(user=>user.firstName===firstName && user.lastName===lastName)
+  
+  if(!users.length) return <h1>Loading Info...</h1>
+    
     return <div className="main-wrapper">
     {/* <!-- Side Panel --> */}
     <aside>
@@ -24,25 +32,17 @@ function MainPage() {
           className="avatar"
           width="50"
           height="50"
-          src="https://robohash.org/2"
-          alt=""
+          src={currentUser.avatar}
+          alt={`${firstName} ${lastName}`}
         />
-        <h3>Tin Man</h3>
+        <h3>{`${firstName} ${lastName}`}</h3>
       </header>
   
       {/* <!-- Search form --> */}
-      <form className="aside__search-container">
-        <input
-          type="search"
-          name="messagesSearch"
-          placeholder="Search chats"
-          value=""
-        />
-      </form>
   
       {/* <!--  */}
   
-  <SideChatList />
+  <SideChatList currentUser={currentUser} users={users} />
   
    {/* --> */}
       {/* <!--  --> */}
@@ -52,14 +52,9 @@ function MainPage() {
     <main className="conversation">
       {/* <!-- Chat header --> */}
       <header className="panel"></header>
-  
-      {/* <!--  */}
-  
-        {/* The Messages List will go here. Check main-messages-list.html
-       --> */}
-      <ul className="conversation__messages"></ul>
-  
-      {/* <!-- Message Box --> */}
+
+        <MessageList />
+
       <footer>
         <form className="panel conversation__message-box">
           <input

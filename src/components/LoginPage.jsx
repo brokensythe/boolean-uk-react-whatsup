@@ -9,7 +9,7 @@ function LoginPage() {
     <section className="login-section">
       <h2>Choose your user!</h2>
       <ul>
-       {users.map(user=><Link to={`/logged-in/${user.firstName}-${user.lastName}`}><li>
+       {users.map(user=><Link to={`/logged-in/${user.firstName}_${user.lastName}`}><li>
           <button className="user-selection">
             <img
               className="avatar"

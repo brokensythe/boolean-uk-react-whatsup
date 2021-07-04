@@ -13,12 +13,26 @@ import { useEffect } from "react"
 export default function App() {
 
   const setUsers = useStore(store=>store.setUsers)
+  const setConversations = useStore(store=>store.setConversations)
+  const setMessages = useStore(store=>store.setMessages)
 
   useEffect(()=>{
     fetch("http://localhost:4000/users")
     .then(resp=>resp.json())
     .then(setUsers)
 }, [setUsers])
+
+  useEffect(()=>{
+    fetch("http://localhost:4000/conversations")
+    .then(resp=>resp.json())
+    .then(setConversations)
+  }, [setConversations])
+
+  useEffect(()=>{
+    fetch("http://localhost:4000/conversations")
+    .then(resp=>resp.json())
+    .then(setMessages)
+  }, [setMessages])
 
   return <Switch>
     <Route path="/login">
